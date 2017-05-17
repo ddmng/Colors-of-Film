@@ -2,6 +2,8 @@ import numpy as np
 import cv2
 import os
 import sys
+import sys
+import skvideo.io
 
 # make sure the user enters in the needed values
 if len(sys.argv) < 2:
@@ -20,8 +22,15 @@ imgWidth = int(os.path.expanduser(sys.argv[2]))
 imgHeight = int(os.path.expanduser(sys.argv[3]))
 
 def colorsOfFilm(path, imgWidth, imgHeight):
-    vidcap = cv2.VideoCapture(path)
+    # vidcap = cv2.VideoCapture(path)
+    vidcap = skvideo.io.VideoCapture(path)
+
     success,image = vidcap.read()
+    if not success:
+        print path
+        exit(10 - success)
+    else:
+        print "vidcap ok"
 
     frames = []
 
@@ -29,12 +38,15 @@ def colorsOfFilm(path, imgWidth, imgHeight):
     success = True
     while success:
       try:
+          # print "reading next"
           success,image = vidcap.read()
+          # print "read ", success
           avg_row_col = np.average(image, axis=0)
           avg_color = np.average(avg_row_col, axis=0)
           avg_color = np.uint8(avg_color)
           frames.append(avg_color)
       except IndexError:
+          print "Error in while loop"
           break
 
     # get the average of the bucket size
