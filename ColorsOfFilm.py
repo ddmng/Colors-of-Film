@@ -22,7 +22,6 @@ imgHeight = int(os.path.expanduser(sys.argv[3]))
 
 def colorsOfFilm(path, imgWidth, imgHeight):
     vidcap = skvideo.io.VideoCapture(path)
-    #vidcap = skvideo.io.vread(path)
 
     success,image = vidcap.read()
     if not success:
